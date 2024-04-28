@@ -1,0 +1,101 @@
+Criação das tabelas 
+
+-- CRIAÇÃO DAS TABELAS CONFORME MER 
+
+-- Criando a tabela Crime
+CREATE TABLE Crime (
+    ID NUMBER PRIMARY KEY,
+    Tipo VARCHAR2(100),
+    Data DATE,
+    Localizacao VARCHAR2(200)
+);
+
+-- Criando a tabela Suspeito
+CREATE TABLE Suspeito (
+    ID NUMBER PRIMARY KEY,
+    Nome VARCHAR2(100),
+    DataNascimento DATE,
+    Endereco VARCHAR2(200)
+);
+
+-- Criando a tabela Emergencia
+CREATE TABLE Emergencia (
+    ID NUMBER PRIMARY KEY,
+    Tipo VARCHAR2(100),
+    Localizacao VARCHAR2(200),
+    Data DATE,
+    Status VARCHAR2(100)
+);
+
+-- Criando a tabela Ocorrencia
+CREATE TABLE Ocorrencia (
+    ID_Ocorrencia NUMBER PRIMARY KEY,
+    ID_Crime NUMBER,
+    ID_Suspeito NUMBER,
+    ID_Emergencia NUMBER,
+    FOREIGN KEY (ID_Crime) REFERENCES Crime(ID),
+    FOREIGN KEY (ID_Suspeito) REFERENCES Suspeito(ID),
+    FOREIGN KEY (ID_Emergencia) REFERENCES Emergencia(ID)
+);
+
+-- Criando a tabela Acionamento
+CREATE TABLE Acionamento (
+    ID_Acionamento NUMBER PRIMARY KEY,
+    ID_SistemaAlarme NUMBER,
+    ID_Emergencia NUMBER,
+    Data DATE
+);
+
+//AUTOMAÇÃO DA CRIAÇÃO DE TABELAS POR MEIO DE PL/SQL --PROCEDURE:
+
+CREATE OR REPLACE PROCEDURE CriarTabelas AS
+BEGIN
+  -- Criando a tabela Crime
+  EXECUTE IMMEDIATE 'CREATE TABLE Crime (
+             ID NUMBER PRIMARY KEY,
+             Tipo VARCHAR2(100),
+             Data DATE,
+             Localizacao VARCHAR2(200)
+           )';
+
+  -- Criando a tabela Suspeito
+  EXECUTE IMMEDIATE 'CREATE TABLE Suspeito (
+             ID NUMBER PRIMARY KEY,
+             Nome VARCHAR2(100),
+             DataNascimento DATE,
+             Endereco VARCHAR2(200)
+           )';
+
+  -- Criando a tabela Emergencia
+  EXECUTE IMMEDIATE 'CREATE TABLE Emergencia (
+             ID NUMBER PRIMARY KEY,
+             Tipo VARCHAR2(100),
+             Localizacao VARCHAR2(200),
+             Data DATE,
+             Status VARCHAR2(100)
+           )';
+
+  -- Criando a tabela Ocorrencia
+  EXECUTE IMMEDIATE 'CREATE TABLE Ocorrencia (
+             ID_Ocorrencia NUMBER PRIMARY KEY,
+             ID_Crime NUMBER,
+             ID_Suspeito NUMBER,
+             ID_Emergencia NUMBER,
+             FOREIGN KEY (ID_Crime) REFERENCES Crime(ID),
+             FOREIGN KEY (ID_Suspeito) REFERENCES Suspeito(ID),
+             FOREIGN KEY (ID_Emergencia) REFERENCES Emergencia(ID)
+           )';
+
+  -- Criando a tabela Acionamento
+  EXECUTE IMMEDIATE 'CREATE TABLE Acionamento (
+             ID_Acionamento NUMBER PRIMARY KEY,
+             ID_SistemaAlarme NUMBER,
+             ID_Emergencia NUMBER,
+             Data DATE,
+             TempoResposta INTERVAL DAY TO SECOND,
+             FOREIGN KEY (ID_SistemaAlarme) REFERENCES SistemaAlarme(ID),
+             FOREIGN KEY (ID_Emergencia) REFERENCES Emergencia(ID)
+           )';
+END;
+/
+
